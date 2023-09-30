@@ -12,10 +12,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBinding
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-private const val TAG = "CrimeListFragment"
 
 class CrimeListFragment : Fragment() {
 
