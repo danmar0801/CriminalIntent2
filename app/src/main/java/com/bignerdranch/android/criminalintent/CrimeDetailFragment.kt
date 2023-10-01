@@ -74,6 +74,11 @@ class CrimeDetailFragment : Fragment() {
             crimeSuspect.setOnClickListener {
                 selectSuspect.launch(null)
             }
+            val selectSuspectIntent = selectSuspect.contract.createIntent(
+                requireContext(),
+                null
+            )
+            crimeSuspect.isEnabled = canResolveIntent(selectSuspectIntent)
 
         }
         viewLifecycleOwner.lifecycleScope.launch {
@@ -158,6 +163,15 @@ class CrimeDetailFragment : Fragment() {
                 }
             }
         }
+    }
+    private fun canResolveIntent(intent: Intent): Boolean {
+        val packageManager: PackageManager = requireActivity().packageManager
+        val resolvedActivity: ResolveInfo? =
+            packageManager.resolveActivity(
+                intent,
+                PackageManager.MATCH_DEFAULT_ONLY
+            )
+        return resolvedActivity != null
     }
 
 
