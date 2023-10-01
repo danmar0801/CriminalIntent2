@@ -41,7 +41,7 @@ class CrimeDetailFragment : Fragment() {
     private val selectSuspect = registerForActivityResult(
         ActivityResultContracts.PickContact()
     ) { uri: Uri? ->
-        // Handle the result
+        uri?.let { parseContactSelection(it) }
     }
 
     override fun onCreateView(
@@ -145,6 +145,19 @@ class CrimeDetailFragment : Fragment() {
             R.string.crime_report,
             crime.title, dateString, solvedString, suspectText
         )
+    }
+    private fun parseContactSelection(contactUri: Uri) {
+        val queryFields = arrayOf(ContactsContract.Contacts.DISPLAY_NAME)
+        val queryCursor = requireActivity().contentResolver
+            .query(contactUri, queryFields, null, null, null)
+        queryCursor?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val suspect = cursor.getString(0)
+                crimeDetailViewModel.updateCrime { oldCrime ->
+                    oldCrime.copy(suspect = suspect)
+                }
+            }
+        }
     }
 
 
